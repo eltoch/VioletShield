@@ -41,8 +41,6 @@ f.close()
 global channel_id
 channel_id = 0
 
-global send
-send = False
 # message read 
 
 
@@ -61,7 +59,7 @@ async def elevel_heavy(ctx):
 async def elevel_medium(ctx):
     global banned
     banned = medium
-    await ctx.channel.send('Heavy mode selected')
+    await ctx.channel.send('Medium mode selected')
 
 @bot.command(name = 'elevel_light')
 @has_permissions(administrator = True) 
@@ -79,11 +77,17 @@ async def choose_channel_id(ctx, cid):
     channel_id = cid.replace('i','1')
     await ctx.channel.send('Channel Name assigned!')
 
+@bot.command(name = 'helpme')
+@has_permissions(administrator = True) 
+async def helpme(message):
+    response = 'read the ducking documentation'.format(message)
+    embedVar = discord.Embed(title="Bot Commands", description=response, color=0x00ff00)
+    await message.channel.send(embed=embedVar)
+
 @bot.event
 async def on_message(message):
 
     global banned
-    global send
 
     msg = message.content.lower()
     msg = msg.replace('@', 'a')
@@ -104,24 +108,17 @@ async def on_message(message):
         # prevents the bot from replying to itself
         
 
-        #if message.author == client.user:
-        #    return
+        if message.author == client.user:
+            return
 
         if msg.__contains__(word):
-            response = '{0.author.mention} message has been blocked. Please be respectful'.format(message)
-            await message.channel.send(response)
+            message1 = message
             await message.delete()
-            send  = True
 
-@bot.command(name = 'send')
-@has_permissions(administrator = True)
-async def embed(ctx):
-    global channel_id
-    print('hi')
-    channel = bot.get_channel(channel_id)
-    embed = discord.Embed(title="Embed test", description="A test for my discord bot", color=0x5bcdee)
-    embed.add_field(name="Hello!", value="Hello World!", inline=False)
-    await channel.send(embed=embed)
+            response = '{0.author.mention} message has been blocked. Please be respectful'.format(message1)
+            embedVar = discord.Embed(title="Potty word detected", description=response, color=0x00ff00)
+            await message1.channel.send(embed=embedVar)
 
+            
 
 bot.run(TOKEN)

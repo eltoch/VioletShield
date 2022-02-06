@@ -3,6 +3,7 @@
 # import libraries
 from dotenv import load_dotenv
 from discord.ext import commands
+from discord.ext.commands import has_permissions, MissingPermissions
 import discord
 import asyncio
 import os
@@ -11,6 +12,7 @@ import os
 # Bot Token
 load_dotenv('C:/Users/matth/Violet Shield/.env')
 TOKEN = os.environ['TOKEN']
+bot = commands.Bot(command_prefix = "!", case_insensitive = True)
 client = discord.Client()
 
 heavy = set(())
@@ -35,70 +37,88 @@ for line in f:
     line = str(f.readline().rstrip('\n'))
     heavy.add(line)
 f.close()
+
 global channel_id
 channel_id = 0
+
 # message read 
 
-#@client.command(pass_context=True)
+
+
+@bot.command(name = 'elevel_heavy')
+@has_permissions(administrator = True) 
+async def elevel_heavy(ctx):
+    global banned
+    banned = heavy
+    await ctx.channel.send('Heavy mode selected')
 
 
 
+@bot.command(name = 'elevel_medium')
+@has_permissions(administrator = True) 
+async def elevel_medium(ctx):
+    global banned
+    banned = medium
+    await ctx.channel.send('Medium mode selected')
 
-@client.event
+@bot.command(name = 'elevel_light')
+@has_permissions(administrator = True) 
+async def elevel_light(ctx):
+    global banned
+    banned = light
+    await ctx.channel.send('Light mode selected')
+
+@bot.command(name = 'channel_id')
+@has_permissions(administrator = True) 
+async def choose_channel_id(ctx, cid):
+    channel_id = cid.lower()
+    channel_id = cid.replace('o','0')
+    channel_id = cid.replace('l','1')
+    channel_id = cid.replace('i','1')
+    await ctx.channel.send('Channel Name assigned!')
+
+@bot.command(name = 'helpme')
+@has_permissions(administrator = True) 
+async def helpme(message):
+    response = 'read the ducking documentation'.format(message)
+    embedVar = discord.Embed(title="Bot Commands", description=response, color=0x00ff00)
+    await message.channel.send(embed=embedVar)
+
+@bot.event
 async def on_message(message):
+
+    global banned
 
     msg = message.content.lower()
     msg = msg.replace('@', 'a')
     msg = msg.replace('$', 's')
     msg = msg.replace('\'', '')
     msg = msg.replace('+', 't')
-    msg = msg.replace('0', 'o')
+    #msg = msg.replace('0', 'o')
     msg = msg.replace('1', 'i')
     mgs = msg.replace('_', '')
     mgs = msg.replace('-', '')
 
-    global banned
-    global channel_name
-
-    if (message.content == "!elevel_heavy") and message.author.guild_permissions.administrator:
-        banned = heavy
-        await message.channel.send('Heavy mode selected')
-    elif (message.content == "!elevel_medium") and message.author.guild_permissions.administrator:
-        banned = medium
-        await message.channel.send('Medium mode selected')
-    elif (message.content == "!elevel_light") and message.author.guild_permissions.administrator:
-        banned = light
-        await message.channel.send('Light mode selected')
-    elif (message.content.startswith("!channel_name")) and message.author.guild_permissions.administrator:
-        channel_name = message.content.lstrip("!channel_name ")
-        print(channel_name)
-        await message.channel.send('Channel Name assigned!')
+    print(msg)
+   
+    await bot.process_commands(message)
 
     for word in banned:
 
         # prevents the bot from replying to itself
+        
+
         if message.author == client.user:
             return
 
         if msg.__contains__(word):
-            response = '{0.author.mention} message has been blocked. Please be respectful'.format(message)
-            await message.channel.send(response)
-
-            
-
+            message1 = message
             await message.delete()
-            break
+
+            response = '{0.author.mention} message has been blocked. Please be respectful'.format(message1)
+            embedVar = discord.Embed(title="Potty word detected", description=response, color=0x00ff00)
+            await message1.channel.send(embed=embedVar)
 
             
 
-
-
-# Bot Login
-@client.event
-async def on_ready():
-    print('Logged in as')
-    print(client.user.name)
-    print(client.user.id)
-    print('------')
-
-client.run(TOKEN)
+bot.run(TOKEN)

@@ -54,6 +54,12 @@ f.close()
 global channel_id
 channel_id = 0
  
+@bot.event
+async def on_ready():
+    print ("Booting up your system")
+    print ("I am running as " + bot.user.name)
+    print ("With the ID: " +str( bot.user.id))
+
 # Creates commands for each level. 
 @bot.command(name = 'elevel_heavy')
 @has_permissions(administrator = True) 

@@ -15,13 +15,16 @@ TOKEN = os.environ['TOKEN']
 bot = commands.Bot(command_prefix = "!", case_insensitive = True)
 client = discord.Client()
 
+# Creaes the necessary sets for each level. 
 heavy = set(())
 medium = set(())
 light = set(())
 
+# Creates the innitial banned value and sets the default=. 
 global banned
-banned = {}
+banned = heavy
 
+# Opens text documents and reads eachline, then adds them as an object on the set. 
 with open("light.txt") as f:
     line = f.readline()
     length = len(f.readlines())
@@ -30,7 +33,6 @@ with open("light.txt") as f:
         line = f.readline()
         light.add(line.rstrip('\n'))
 f.close()
-
 with open("medium.txt") as f:
     line = f.readline()
     length = len(f.readlines())
@@ -39,7 +41,6 @@ with open("medium.txt") as f:
         line = f.readline()
         medium.add(line.rstrip('\n'))
 f.close()
-
 with open("heavy.txt") as f:
     line = f.readline()
     length = len(f.readlines())
@@ -49,13 +50,11 @@ with open("heavy.txt") as f:
         heavy.add(line.rstrip('\n'))
 f.close()
 
+# Used later
 global channel_id
 channel_id = 0
-
-# message read 
-
-
-
+ 
+# Creates commands for each level. 
 @bot.command(name = 'elevel_heavy')
 @has_permissions(administrator = True) 
 async def elevel_heavy(ctx):
@@ -77,7 +76,7 @@ async def elevel_light(ctx):
     global banned
     banned = light
     await ctx.channel.send('Light mode selected')
-
+# Currently not used, will be implemented later. 
 @bot.command(name = 'channel_id')
 @has_permissions(administrator = True) 
 async def choose_channel_id(ctx, cid):
@@ -87,13 +86,15 @@ async def choose_channel_id(ctx, cid):
     channel_id = cid.replace('i','1')
     await ctx.channel.send('Channel Name assigned!')
 
+# Runs the help command. 
 @bot.command(name = 'helpme')
 @has_permissions(administrator = True) 
 async def helpme(message):
-    response = 'read the ducking documentation'.format(message)
-    embedVar = discord.Embed(title="Bot Commands", description=response, color=0x00ff00)
+    response = 'Documentation availiable at https://tinyurl.com/VioletShield'.format(message)
+    embedVar = discord.Embed(title="Bot Commands", description=response, color=0xCE9DD9)
     await message.channel.send(embed=embedVar)
 
+# Detects each time a message is sent.
 @bot.event
 async def on_message(message):
 
@@ -120,13 +121,14 @@ async def on_message(message):
 
         if message.author.bot:
             return
-
+        # determines if the message contains the banned phrase. 
         if msg.__contains__(word):
             message1 = message
             await message.delete()
 
+            #Creates an embeded message response
             response = '{0.author.mention} message has been blocked. Please be respectful'.format(message1)
-            embedVar = discord.Embed(title="Potty word detected", description=response, color=0x00ff00)
+            embedVar = discord.Embed(title="Potty word detected", description=response, color=0xB399D4)
             await message1.channel.send(embed=embedVar)
 
             

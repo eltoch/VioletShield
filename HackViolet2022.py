@@ -2,17 +2,16 @@
 
 # import libraries
 from dotenv import load_dotenv
-from discord.ext import commands
 import discord
 import asyncio
 import os
 
-
 # Bot Token
-load_dotenv('C:/Users/matth/Violet Shield/.env')
+load_dotenv()
 TOKEN = os.environ['TOKEN']
 client = discord.Client()
 
+# Banned word levels
 heavy = set(())
 medium = set(())
 light = set(())
@@ -35,13 +34,10 @@ for line in f:
     line = str(f.readline().rstrip('\n'))
     heavy.add(line)
 f.close()
-global channel_id
-channel_id = 0
+
 # message read 
 
 #@client.command(pass_context=True)
-
-
 
 
 @client.event
@@ -58,7 +54,6 @@ async def on_message(message):
     mgs = msg.replace('-', '')
 
     global banned
-    global channel_name
 
     if (message.content == "!elevel_heavy") and message.author.guild_permissions.administrator:
         banned = heavy
@@ -69,11 +64,7 @@ async def on_message(message):
     elif (message.content == "!elevel_light") and message.author.guild_permissions.administrator:
         banned = light
         await message.channel.send('Light mode selected')
-    elif (message.content.startswith("!channel_name")) and message.author.guild_permissions.administrator:
-        channel_name = message.content.lstrip("!channel_name ")
-        print(channel_name)
-        await message.channel.send('Channel Name assigned!')
-
+    
     for word in banned:
 
         # prevents the bot from replying to itself
@@ -83,9 +74,6 @@ async def on_message(message):
         if msg.__contains__(word):
             response = '{0.author.mention} message has been blocked. Please be respectful'.format(message)
             await message.channel.send(response)
-
-            
-
             await message.delete()
             break
 

@@ -1,6 +1,6 @@
 # VioletShield
 
-A underage sexual harassment focused content filter discord bot built for HackViolet 2022. 
+An underage sexual harassment focused content filter discord bot built for HackViolet 2022. 
 
 Documentation: https://tinyurl.com/VioletShield
 

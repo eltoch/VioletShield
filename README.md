@@ -13,3 +13,9 @@ The text files heavy.txt, medium.txt, and light.txt contain our lists of banned 
 For testing purposes we suggest you add it to a test server and play around with it. 
 This file requires a .env to run with Token = insert_discord_token_here this is excluded as the token for a discord bot is private. 
 Sharing the token would allow outside users to edit and control the bot which could lead to problems. 
+
+For code testing, follow this tutorial: https://discordpy.readthedocs.io/en/stable/discord.html
+Create a bot with permissions Administrator and create a .env file with the token found under the Bot section. 
+Click Copy where it says Token
+.env should contain:
+Token = pasted_token

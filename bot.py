@@ -13,24 +13,28 @@ load_dotenv('C:/Users/matth/Violet Shield/.env')
 TOKEN = os.environ['TOKEN']
 client = discord.Client()
 
-# Banned word levels
-heavy = {'anal', 'anus', 'arse', 'ass', 'smack my ass', 'ballsack', 'balls', 'blowjob', 'blow job', 'bollock', 'boner', 'boob','boobies', 'booby', 'cunt',  'butt', 
-'buttplug', 'clitoris', ' cock', 'dick', 'diddle', 'dildo', 'feck', 'fuck', 'flange', 'jizz', 'knobend', 'penis', 'prick', 'pussy', 'sex', 'shit', 'tit', 'titty', 
-'tittie', 'twat', 'vagina', 'wank', 'whore', 'little boy', 'little girl', 'masturbate', 'jack off', 'kitty', 'kitten', 'porn', 
-'sex', 'horny', 'sexy', 'h0rny', 's3x', 'seggsy', 's3ggsy', 'im hard', 'cum', 'daddy', 'princess', 'suck', 'slut', 'swallow', 'chode', 'nipple', 'lick', 'vag', 
-'virgin', 'tight', 'wet', 'semen', 'you made me cum', 'you make me cum' 'how old are you', 'pegging', 'facial', 'buttfuck', 'butt fuck', 'but tfuck', 'little', 'kid'}
-
-medium = {'Anal', 'smack my ass', 'ballsack', 'balls', 'blowjob', 'blow job', 'boner', 'boob', 'boobies', 'booby', 'cunt', 'buttplug', 'clitoris', 'cock', 'dildo', 'fuck', 
-'jizz', 'knobend', 'penis', 'prick', 'pussy', 'sex','tit', 'titty', 'tittie', 'twat', 'vagina', 'wank', 'whore', 'little boy', 'little girl', 'masturbate', 'jack off', 'kitty', 
-'kitten', 'porn', 'sex', 'horny', 'sexy', 'h0rny', 's3x', 'seggsy', 's3ggsy', 'im hard', 'cum', 'daddy', 'princess', 'suck', 'slut', 'swallow', 
-'chode', 'nipple', 'lick', 'vag', 'virgin', 'tight', 'wet', 'semen', 'you made me cum', 'you make me cum' 'how old are you', 'pegging', 'facial','kid'}
-
-light = {'horny', 'blowjob', 'boner', 'little girl', 'kitten', 'kitty', 'masturbate', 'porn', 'im hard', 'daddy', 'cum', 'princess', 
-'slut', 'you make me hard', 'how old are you', 'pegging', 'peg','kid'}
+heavy = set(())
+medium = set(())
+light = set(())
 
 global banned
 banned = {}
 
+f = open("light.txt", "r") 
+for line in f:
+    line = str(f.readline().rstrip('\n'))
+    light.add(line)
+f.close()
+f = open("medium.txt", "r")
+for line in f:
+    line = str(f.readline().rstrip('\n'))
+    medium.add(line)
+f.close()
+f = open("heavy.txt", "r")
+for line in f:
+    line = str(f.readline().rstrip('\n'))
+    heavy.add(line)
+f.close()
 global channel_id
 channel_id = 0
 # message read 
